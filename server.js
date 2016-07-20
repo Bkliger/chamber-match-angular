@@ -92,6 +92,8 @@ app.get('/api/me', function (req, res) {
   res.json(req.user);
 });
 
+app.get('/templates/:name', controllers.api.templates);
+
 
 //Authentication Routes
 // sign up new user, then log them in

@@ -1,12 +1,7 @@
 $(document).ready(function() {
     console.log("search.js is loaded");
     $form = $("#search_form");
-    // $("#date-picker").datepicker({});
 
-
-    //handlebars
-    var source = $("#event_template").html();
-    event_template = Handlebars.compile(source);
     //Update user profile data
     $form.on("submit", function(e) {
         e.preventDefault();
@@ -99,11 +94,11 @@ $(document).ready(function() {
 //End of document ready
 });
 
-function renderEvent(event) {
-console.log("rendering", event)
-    var eventHtml = event_template(event);
-    $("#events").prepend(eventHtml);
-}
+// function renderEvent(event) {
+// console.log("rendering", event)
+//     var eventHtml = event_template(event);
+//     $("#events").prepend(eventHtml);
+// }
 
 function findEventsSuccess(json) {
   $.get('/api/me', function getUserData(user) {

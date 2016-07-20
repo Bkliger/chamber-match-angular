@@ -1,14 +1,131 @@
+angular
+  .module('chamber-match', [])
+  .controller('EventsIndexController', EventsIndexController);
+
+
+  EventsIndexController.$inject = ['$http'];
+  function EventsIndexController ($http) {
+    var vm = this;
+    vm.newEvent = {};
+
+    vm.newEvent = {
+        date: '12/12/17',
+        minimum_level: 'B',
+        status: "open"
+    };
+
+//     vm.events = [
+//       {date: '12/12/17',
+//       minimum_level: 'B',
+//       status: "open"
+//     },
+//     {date: '12/12/17',
+//     minimum_level: 'B',
+//     status: "open"
+//   },
+//   {date: '12/12/17',
+//   minimum_level: 'B',
+//   status: "open"
+// }]
+// console.log(vm.events)
+
+
+    // //retrieve all events for a user
+        $http({
+            method: "GET",
+            url: '/api/events/',
+          }).then(function successCallback(response){
+              // console.log("response data", response.data)
+              // vm.events = response.data
+              // console.log("vm.events",vm.events)
+              var eventsArray = [];
+              $.get('/api/me', function getUserData(user) {
+                  response.data.forEach(function(event) {
+                      // console.log("event",event)
+                      var checkHost = (event._host._id === user._id);
+                      if (event.violin1 !== null) {
+                          var checkViolin1 = (event.violin1._id === user._id);
+                      } else { checkViolin1 = false}
+                      if (event.violin2 !== null) {
+                          var checkViolin2 = (event.violin2._id === user._id);
+                      } else { checkViolin2 = false}
+                      if (event.viola !== null) {
+                          var checkViola = (event.viola._id === user._id);
+                      } else { checkViola = false}
+                      if (event.cello !== null) {
+                          var checkCello = (event.cello._id === user._id);
+                      } else { checkCello = false}
+
+                      if (checkHost||checkViolin1||checkViolin2||checkViola||checkCello)  {
+                        event['date'] = convertDate(event.date)
+                        event['minimum_level'] = translateLevel(event.minimum_level);
+
+                        eventsArray.push(event);
+
+                      }
+
+
+                      // console.log("vm.events", vm.events)
+                  });
+                  console.log("eventsArray",eventsArray)
+                  vm.events = eventsArray
+                  console.log("vm.events",vm.events)
+                });
+
+              },function errorCallback(response) {
+            console.log('There was an error getting the data', response);
+          });
+
+    // //creates each event row separately
+    function pickEvents(response) {
+
+        var eventArray = [];
+        $.get('/api/me', function getUserData(user) {
+            response.forEach(function(event) {
+                var checkHost = (event._host._id === user._id);
+                if (event.violin1 !== null) {
+                    var checkViolin1 = (event.violin1._id === user._id);
+                } else { checkViolin1 = false}
+                if (event.violin2 !== null) {
+                    var checkViolin2 = (event.violin2._id === user._id);
+                } else { checkViolin2 = false}
+                if (event.viola !== null) {
+                    var checkViola = (event.viola._id === user._id);
+                } else { checkViola = false}
+                if (event.cello !== null) {
+                    var checkCello = (event.cello._id === user._id);
+                } else { checkCello = false}
+
+                if (checkHost||checkViolin1||checkViolin2||checkViola||checkCello)  {
+                  event['date'] = convertDate(event.date)
+                  event['minimum_level'] = translateLevel(event.minimum_level);
+                  console.log("inside if", event)
+                  eventArray.push(event);
+                }
+            });
+            console.log("this is event array", eventArray)
+            return eventArray
+
+        });
+
+    }
+  }
+
+
+
+
+
+
+
+
+
 $(document).ready(function() {
     console.log("app.js is loaded");
     $form = $("#user_profile_form");
-    //handlebars
-    var source = $("#event_template").html();
-    event_template = Handlebars.compile(source);
-    // $("#date-picker").datepicker({});
 
     //initial load of index.html - get the user data and load profile page
     $.get('/api/me', function getUserData(user) {
-      console.log(user)
+      // console.log(user)
         $.ajax({
             method: "GET",
             url: '/api/users/' + user._id,
@@ -17,7 +134,6 @@ $(document).ready(function() {
         });
     });
 
-    getAllEvents();
 
     //Update user profile data
     $form.on("submit", function(e) {
@@ -61,7 +177,7 @@ $(document).ready(function() {
     //Create new event in the modal dialog box
     $('#saveEvent').on('click', function(e) {
         e.preventDefault();
-        console.log($("#eventModal").data("event_id").event_id)
+        console.log($("#eventModal").data("event_id").event_id);
         if ($("#eventModal").data("event_id").event_id === "new") {
             $.get('/api/me', function getUserData(user) {
                 var url = "/api/events/" + user._id;
@@ -121,50 +237,6 @@ $(document).ready(function() {
 });
 
 
-//retrieve all events for a user
-function getAllEvents() {
-    $.ajax({
-        method: "GET",
-        url: '/api/events/',
-        success: handleGetAllEvents,
-        error: getAllError
-    });
-}
-
-//creates each event row separately
-function handleGetAllEvents(json) {
-    $("#events").empty();
-    $.get('/api/me', function getUserData(user) {
-        json.forEach(function(event) {
-            var checkHost = (event._host._id === user._id);
-            if (event.violin1 !== null) {
-                var checkViolin1 = (event.violin1._id === user._id);
-            } else { checkViolin1 = false}
-            if (event.violin2 !== null) {
-                var checkViolin2 = (event.violin2._id === user._id);
-            } else { checkViolin2 = false}
-            if (event.viola !== null) {
-                var checkViola = (event.viola._id === user._id);
-            } else { checkViola = false}
-            if (event.cello !== null) {
-                var checkCello = (event.cello._id === user._id);
-            } else { checkCello = false}
-
-            if (checkHost||checkViolin1||checkViolin2||checkViola||checkCello)  {
-
-              event['date'] = convertDate(event.date)
-              event['minimum_level'] = translateLevel(event.minimum_level);
-                renderEvent(event);
-            }
-        });
-    });
-}
-
-//use handlebars to render the events
-function renderEvent(event) {
-    var eventHtml = event_template(event);
-    $("#events").prepend(eventHtml);
-}
 
 function getAllError(err) {
     console.log("get all events error");
@@ -226,7 +298,7 @@ function handleGetTheUser(user) {
 }
 
 function getTheUserError(err) {
-  console.log("get the user error")
+  console.log("get the user error");
     alert("Please Log In");
 }
 

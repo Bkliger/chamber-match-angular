@@ -9,8 +9,8 @@
 
   <!-- STYLESHEETS -->
   <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
-  <!-- <link rel="stylesheet" href="/styles/bootstrap-theme.min.css"> -->
   <link type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker.css">
   <link rel="stylesheet" href="styles/styles.css">
 
   <!-- VENDOR SCRIPTS -->
@@ -20,6 +20,8 @@
 
   <script src="vendor/jquery/dist/jquery.min.js"></script>
   <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.js"></script>
+  <script src="vendor/handlebars/handlebars.min.js"></script>
 
   <!-- APPLICATION SCRIPTS -->
   <script src="scripts/app.js"></script>
@@ -51,7 +53,7 @@
 
 
 
-  <div id="user" class="row">
+  <!-- <div id="user" class="row">
     <div class="col-sm-12">
       <form class="form-inline inputForm" id="user_profile_form">
           <div class="form-group col-sm-3 col-md-offset-2 pull-left">
@@ -117,76 +119,69 @@
               <br>
             <div class="form-group col-md-4">
 
-              <!-- <button id="saveButton" name="saveButton" class="btn btn-primary">Logout</button> -->
-            </div>
+              <button id="saveButton" name="saveButton" class="btn btn-primary">Logout</button> -->
+            <!-- </div>
           </div>
         </form>
       </div>
-  </div>
+  </div> -->
 
   <!-- event list -->
 
-  <section class="container">
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <h2 class="inputLabel">Your Events</h2>
+  <div class="container" ng-controller="EventsIndexController as eventsIndexCtrl">
+    <section class="container">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h2 class="inputLabel">Your Events</h2>
+        </div>
       </div>
-    </div>
-    <!-- events - this is where handelbars attaches -->
-      <div class="container" ng-controller="EventsIndexController as eventsIndexCtrl">
+      <!-- events - this is where handelbars attaches -->
+      <div id='events' class="black">
 
-        <!-- one event -->
-        <div class="row event">
+          <!-- one event -->
+          <div class="row event">
 
-          <div class="col-md-12">
-            <div class="panel">
-              <div class="panel-body">
+            <div class="col-md-12">
+              <div class="panel">
+                <div class="panel-body">
 
 
-                <!-- begin event internal row -->
+                  <!-- begin event internal row -->
 
-                <div class='row' ng-repeat="event in eventsIndexCtrl.events">
+                  <div class='row'>
 
-                  <div class="col-md-12">
-                    <ul>
-                      <div class="col-md-1">
-                        <li><h4>Date: </h4>&nbsp<span>{{event.date}}</span></li>
-                      </div>
-                      <div class="col-md-2 col-sm-1">
-                        <li><h4>Host Name: </h4>&nbsp<span>{{event._host.name}}</span></li>
-                      </div>
-                      <div class="col-md-1">
-                        <li><h4>Min Level: </h4>&nbsp<span>{{event.minimum_level}}</span></li>
-                      </div>
-                      <div class="col-md-1">
-                        <li><h4>Status: </h4>&nbsp<span>{{event.status}}</span></li>
-                      </div>
-                      <div class="col-md-2 col-sm-1">
-                        <li><h4>1st Violin: </h4>&nbsp<span>{{violin1.name}}</span></li>
-                      </div>
-                      <div class="col-md-2 col-sm-1">
-                        <li><h4>2nd Violin: </h4>&nbsp<span>{{violin2.name}}</span></li>
-                      </div>
-                      <div class="col-md-1">
-                        <li><h4>Viola: </h4>&nbsp<span>{{viola.name}}</span></li>
-                      </div>
-                      <div class="col-md-1">
-                        <li><h4>Cello: </h4>&nbsp<span>{{cello.name}}</span></li>
-                      </div>
-                      <div class="col-md-1 col-sm-0">
-                        <button class='btn btn-primary edit-event' id="edit-event">Edit Event</button>
-                      </div>
-                    </ul>
+                    <div class="col-md-12">
+                      <ul>
+                        <div class="col-md-1">
+                          <li><h4>Date: </h4>&nbsp<span>{{date}}</span></li>
+                        </div>
+                        <div class="col-md-2 col-sm-1">
+                          <li><h4>Host Name: </h4>&nbsp<span></span></li>
+                        </div>
+                        <div class="col-md-1">
+                          <li><h4>Min Level: </h4>&nbsp<span>{{minimum_level}}</span></li>
+                        </div>
+                        <div class="col-md-1">
+                          <li><h4>Status: </h4>&nbsp<span>{{status}}</span></li>
+                        </div>
+                        <div class="col-md-1 col-sm-0">
+                          <button class='btn btn-primary edit-event' id="edit-event">Edit Event</button>
+                        </div>
+                      </ul>
+                    </div>
                   </div>
-                </div>
-                <!-- end of event internal row -->
+                  <!-- end of event internal row -->
 
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-        <!-- end one event -->
+          <!-- end one event -->
+
+
+        </script>
+  </div>
+
 
     </div>
   </section>
