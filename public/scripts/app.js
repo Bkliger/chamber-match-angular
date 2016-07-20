@@ -3,8 +3,8 @@ angular
   .controller('EventsIndexController', EventsIndexController);
 
 
-  EventsIndexController.$inject = ['$http'];
-  function EventsIndexController ($http) {
+  EventsIndexController.$inject = ['$http', '$timeout'];
+  function EventsIndexController ($http,$timeout) {
     var vm = this;
     vm.newEvent = {};
 
@@ -40,6 +40,7 @@ angular
               // console.log("vm.events",vm.events)
               var eventsArray = [];
               $.get('/api/me', function getUserData(user) {
+                $timeout(function(){console.log(response.data.$$hashKey)});
                   response.data.forEach(function(event) {
                       // console.log("event",event)
                       var checkHost = (event._host._id === user._id);
@@ -67,6 +68,7 @@ angular
 
                       // console.log("vm.events", vm.events)
                   });
+
                   console.log("eventsArray",eventsArray)
                   vm.events = eventsArray
                   console.log("vm.events",vm.events)
